@@ -4,60 +4,77 @@ const ctx = canvas.getContext("2d");
 const countdownEl = document.getElementById("countdown");
 const shutter = document.getElementById("shutter");
 const download = document.getElementById("download");
+const captureBtn = document.querySelector(".capture");
 
-let filter = "none";
-let photosTaken = 0;
+let currentFilter = "none";
+let photoCount = 0;
+let w, h;
 
 // Start camera
 navigator.mediaDevices.getUserMedia({ video: true })
-  .then(stream => video.srcObject = stream);
+  .then(stream => video.srcObject = stream)
+  .catch(() => alert("Camera permission denied"));
 
-// Set live filter
-function setFilter(value) {
-  filter = value;
-  video.style.filter = value;
+// Apply live filter
+function setFilter(filter) {
+  currentFilter = filter;
+  video.style.filter = filter;
 }
 
-// Countdown logic
-function countdown(seconds) {
+// Start PhotoBooth
+async function startBooth() {
+  photoCount = 0;
+  download.style.display = "none";
+  captureBtn.style.display = "inline-block";
+
+  if (video.videoWidth === 0) {
+    await new Promise(res => video.onloadedmetadata = res);
+  }
+
+  w = video.videoWidth;
+  h = video.videoHeight;
+
+  canvas.width = w;
+  canvas.height = h * 4;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+// Countdown
+function runCountdown(seconds) {
   return new Promise(resolve => {
-    let i = seconds;
-    countdownEl.textContent = i;
+    let t = seconds;
+    countdownEl.style.display = "flex";
+    countdownEl.textContent = t;
+
     const timer = setInterval(() => {
-      i--;
-      countdownEl.textContent = i || "";
-      if (i <= 0) {
+      t--;
+      countdownEl.textContent = t;
+      if (t === 0) {
         clearInterval(timer);
+        countdownEl.style.display = "none";
         resolve();
       }
     }, 1000);
   });
 }
 
-// Start photobooth
-async function startBooth() {
-  photosTaken = 0;
-  canvas.width = video.videoWidth;
-  canvas.height = video.videoHeight * 4;
+// Capture photo step-by-step
+async function captureStep() {
+  if (photoCount >= 4) return;
 
-  for (let i = 0; i < 4; i++) {
-    await countdown(3);
-    takePhoto(i);
-  }
+  await runCountdown(3);
 
-  download.style.display = "block";
-  download.href = canvas.toDataURL();
-}
-
-// Capture photo
-function takePhoto(index) {
+  shutter.currentTime = 0;
   shutter.play();
-  ctx.filter = filter;
-  ctx.drawImage(
-    video,
-    0,
-    index * video.videoHeight,
-    video.videoWidth,
-    video.videoHeight
-  );
+
+  ctx.filter = currentFilter;
+  ctx.drawImage(video, 0, photoCount * h, w, h);
+
+  photoCount++;
+
+  if (photoCount === 4) {
+    captureBtn.style.display = "none";
+    download.href = canvas.toDataURL("image/png");
+    download.style.display = "block";
+  }
 }
