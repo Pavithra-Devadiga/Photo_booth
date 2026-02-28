@@ -1,22 +1,31 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background: #0f0f0f;
+  margin: 0;
+  background: radial-gradient(circle at top, #111, #000);
   color: #fff;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   text-align: center;
 }
 
-h1 {
-  margin: 20px 0;
+.title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin: 25px 0;
+  letter-spacing: 2px;
 }
 
 .booth {
   position: relative;
-  width: 320px;
-  height: 240px;
+  width: 85%;
+  max-width: 800px;
+  aspect-ratio: 16 / 9;
   margin: auto;
-  border-radius: 20px;
+  border-radius: 25px;
   overflow: hidden;
-  box-shadow: 0 0 20px rgba(0,255,255,0.3);
+  box-shadow: 0 0 35px rgba(0,255,255,0.35);
 }
 
 video {
@@ -28,35 +37,56 @@ video {
 #countdown {
   position: absolute;
   inset: 0;
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
-  font-size: 80px;
-  font-weight: bold;
-  background: rgba(0,0,0,0.4);
+  font-size: 6rem;
+  font-weight: 700;
+  background: rgba(0,0,0,0.55);
+}
+
+.controls {
+  margin: 20px 0;
 }
 
 .controls button,
-.start {
-  margin: 10px;
-  padding: 10px 16px;
-  border-radius: 20px;
+.start,
+.capture {
+  padding: 12px 26px;
+  margin: 8px;
+  border-radius: 30px;
   border: none;
+  font-family: inherit;
+  font-size: 1rem;
   cursor: pointer;
-  background: #1f1f1f;
-  color: #fff;
+  background: rgba(255,255,255,0.08);
+  color: white;
+  backdrop-filter: blur(10px);
 }
 
 .controls button:hover,
-.start:hover {
+.start:hover,
+.capture:hover {
   background: cyan;
-  color: #000;
+  color: black;
+}
+
+.capture {
+  display: none;
+}
+
+canvas {
+  display: block;
+  margin: 30px auto;
+  max-width: 300px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(255,255,255,0.2);
 }
 
 #download {
   display: none;
-  margin-top: 20px;
+  font-size: 1.2rem;
   color: cyan;
   text-decoration: none;
-  font-size: 18px;
+  margin-bottom: 30px;
 }
