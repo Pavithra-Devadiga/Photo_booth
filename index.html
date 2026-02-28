@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PhotoBooth</title>
+
+  <!-- Aesthetic font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1 class="title">📸 PhotoBooth</h1>
+
+  <div class="booth">
+    <video id="video" autoplay playsinline muted></video>
+    <div id="countdown"></div>
+  </div>
+
+  <div class="controls">
+    <button onclick="setFilter('none')">Normal</button>
+    <button onclick="setFilter('grayscale(1)')">B & W</button>
+    <button onclick="setFilter('sepia(1)')">Sepia</button>
+    <button onclick="setFilter('contrast(1.2) saturate(1.4)')">Vintage</button>
+  </div>
+
+  <button class="start" onclick="startBooth()">Start PhotoBooth</button>
+  <button class="capture" onclick="captureStep()">📸 Capture</button>
+
+  <canvas id="canvas"></canvas>
+
+  <a id="download" download="photostrip.png">⬇ Download Photo Strip</a>
+
+  <audio id="shutter" src="shutter.mp3"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
